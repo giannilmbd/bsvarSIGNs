@@ -5,7 +5,23 @@
 \title{Bayesian estimation of a Structural Vector Autoregression
 with traditional and narrative sign restrictions via Gibbs sampler}
 \usage{
-\method{estimate}{BSVARSIGN}(specification, S, thin = 1, show_progress = TRUE)
+\method{estimate}{BSVARSIGN}(
+  specification,
+  S,
+  thin = 1,
+  show_progress = TRUE,
+  n_draws = 10,
+  draw_strategy
+)
+
+\method{estimate}{BSVARSIGN}(
+  specification,
+  S,
+  thin = 1,
+  show_progress = TRUE,
+  n_draws = 10,
+  draw_strategy
+)
 }
 \arguments{
 \item{specification}{an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.}
@@ -15,6 +31,10 @@ with traditional and narrative sign restrictions via Gibbs sampler}
 \item{thin}{a positive integer, specifying the frequency of MCMC output thinning}
 
 \item{show_progress}{a logical value, if \code{TRUE} the estimation progress bar is visible}
+
+\item{n_draws}{integer number of rotation matrix draws per posterior draw}
+
+\item{draw_strategy}{What to do about the oversampling of rotation matrices? 1 = overrep, 2 = prune, 3 = Importance Sampling}
 }
 \value{
 An object of class \code{PosteriorBSVARSIGN} containing the Bayesian estimation output and containing two elements:

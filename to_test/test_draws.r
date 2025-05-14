@@ -1,10 +1,9 @@
 
-remove.packages('bsvarSIGNs')
-devtools::clean_dll('~/Dropbox/SNB/bsvarSIGNs/')
-devtools::load_all('~/Dropbox/SNB/bsvarSIGNs/')
+# remove.packages('bsvarSIGNs')
+remotes::install_github("giannilmbd/bsvarSIGNs",force=F)
 
 # install.packages('bsvarSIGNs')
-# library(bsvarSIGNs)
+library(bsvarSIGNs)
 # investigate the effects of the optimism shock
 data(optimism)
 
@@ -21,7 +20,7 @@ specification  = specify_bsvarSIGN$new(optimism * 100,
 
 # estimate the model
 
-posterior      = estimate.BSVARSIGN(specification, S = 200,n_draws = 30,draw_strategy=3)#
+posterior      = estimate(specification, S = 200,n_draws = 30,draw_strategy=3)#
 
 
 irf            = bsvars::compute_impulse_responses(posterior, horizon = 40)
