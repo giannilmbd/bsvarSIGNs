@@ -1,10 +1,11 @@
 
  remove.packages('bsvarSIGNs')
-# remotes::install_github("giannilmbd/bsvarSIGNs",force=T)
-devtools::clean_dll('~/Dropbox/SNB/bsvarSIGNs/')
-devtools::load_all('~/Dropbox/SNB/bsvarSIGNs/')
+remotes::install_github("giannilmbd/bsvarSIGNs",force=T)
+# devtools::clean_dll('~/Dropbox/SNB/bsvarSIGNs/')
+# devtools::load_all('~/Dropbox/SNB/bsvarSIGNs/')
 # install.packages('bsvarSIGNs')
-# library(bsvarSIGNs)
+ library(bsvarSIGNs)
+library(bsvars)
 # investigate the effects of the optimism shock
 data(optimism)
 

@@ -10,7 +10,7 @@ with traditional and narrative sign restrictions via Gibbs sampler}
   S,
   thin = 1,
   show_progress = TRUE,
-  n_draws = 10,
+  n_draws = parallel::detectCores(),
   draw_strategy
 )
 
@@ -19,7 +19,7 @@ with traditional and narrative sign restrictions via Gibbs sampler}
   S,
   thin = 1,
   show_progress = TRUE,
-  n_draws = 10,
+  n_draws = parallel::detectCores(),
   draw_strategy
 )
 }
@@ -32,9 +32,9 @@ with traditional and narrative sign restrictions via Gibbs sampler}
 
 \item{show_progress}{a logical value, if \code{TRUE} the estimation progress bar is visible}
 
-\item{n_draws}{integer number of rotation matrix draws per posterior draw}
-
 \item{draw_strategy}{What to do about the oversampling of rotation matrices? 1 = overrep, 2 = prune, 3 = Importance Sampling}
+
+\item{n_draws_rotation}{(optional; default parallel::detectCores())integer number of rotation matrix draws per posterior draw}
 }
 \value{
 An object of class \code{PosteriorBSVARSIGN} containing the Bayesian estimation output and containing two elements:
@@ -56,13 +56,13 @@ An object of class \code{PosteriorBSVARSIGN} containing the Bayesian estimation 
 }
 \description{
 Estimates Bayesian Structural Vector Autoregression model
-using the Gibbs sampler proposed by Waggoner & Zha (2003) with traditional sign restrictions 
-following Rubio-Ramírez, Waggoner & Zha (2010) and narrative sign restrictions 
+using the Gibbs sampler proposed by Waggoner & Zha (2003) with traditional sign restrictions
+following Rubio-Ramírez, Waggoner & Zha (2010) and narrative sign restrictions
 following Antolín-Díaz & Rubio-Ramírez (2018). Additionally, the parameter matrices \eqn{A} and \eqn{B}
 follow a Minnesota prior and generalised-normal prior distributions respectively with the matrix-specific
-overall shrinkage parameters estimated using a hierarchical prior distribution. 
+overall shrinkage parameters estimated using a hierarchical prior distribution.
 
-Given sign restrictions, in each Gibbs sampler iteration, the sampler draws rotation matrix 
+Given sign restrictions, in each Gibbs sampler iteration, the sampler draws rotation matrix
 \eqn{Q} uniformly from the space of \code{NxN} orthogonal matrices and checks if the sign restrictions
 are satisfied. If a valid \eqn{Q} is found within \code{max_tries} (defined in \code{specify_bsvarSIGN}),
 the sampler saves the current \eqn{A} and \eqn{B} draw and proceeds to the next iteration.
@@ -75,7 +75,7 @@ See section \bold{Details} for the model equations.
 \details{
 The Structural VAR model is given by the reduced form equation:
 \deqn{Y = AX + E}
-where \eqn{Y} is an \code{NxT} matrix of dependent variables, \eqn{X} is a \code{KxT} matrix of explanatory variables, 
+where \eqn{Y} is an \code{NxT} matrix of dependent variables, \eqn{X} is a \code{KxT} matrix of explanatory variables,
 \eqn{E} is an \code{NxT} matrix of reduced form error terms, and \eqn{A} is an \code{NxK} matrix of
 autoregressive slope coefficients and parameters on deterministic terms in \eqn{X}.
 
@@ -94,7 +94,7 @@ data(optimism)
 
 # specify identifying restrictions:
 # + no effect on productivity (zero restriction)
-# + positive effect on stock prices (positive sign restriction) 
+# + positive effect on stock prices (positive sign restriction)
 sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
 
 # specify the model and set seed
@@ -102,18 +102,18 @@ set.seed(123)
 specification  = specify_bsvarSIGN$new(optimism * 100,
                                        p        = 12,
                                        sign_irf = sign_irf)
-                                       
+
 # estimate the model
 posterior      = estimate(specification, S = 10)
 
 }
 \references{
 Antolín-Díaz & Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, American Economic Review, 108(10), 2802-29, <doi:10.1257/aer.20161852>.
- 
+
  Arias, Rubio-Ramírez, & Waggoner (2018), Inference Based on Structural Vector Autoregressions Identified With Sign and Zero Restrictions: Theory and Applications, Econometrica, 86(2), 685-720, <doi:10.3982/ECTA14468>.
- 
+
  Giannone, Lenza, Primiceri (2015) Prior Selection for Vector Autoregressions, Review of Economics and Statistics, 97(2), 436-451 <doi:10.1162/REST_a_00483>.
- 
+
  Rubio-Ramírez, Waggoner & Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, <doi:10.1111/j.1467-937X.2009.00578.x>.
 }
 \author{

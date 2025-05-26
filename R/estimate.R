@@ -8,45 +8,45 @@ estimate <- function(x, ...) {
 #' with traditional and narrative sign restrictions via Gibbs sampler
 #'
 #' @description Estimates Bayesian Structural Vector Autoregression model
-#' using the Gibbs sampler proposed by Waggoner & Zha (2003) with traditional sign restrictions 
-#' following Rubio-Ramírez, Waggoner & Zha (2010) and narrative sign restrictions 
+#' using the Gibbs sampler proposed by Waggoner & Zha (2003) with traditional sign restrictions
+#' following Rubio-Ramírez, Waggoner & Zha (2010) and narrative sign restrictions
 #' following Antolín-Díaz & Rubio-Ramírez (2018). Additionally, the parameter matrices \eqn{A} and \eqn{B}
 #' follow a Minnesota prior and generalised-normal prior distributions respectively with the matrix-specific
-#' overall shrinkage parameters estimated using a hierarchical prior distribution. 
-#' 
-#' Given sign restrictions, in each Gibbs sampler iteration, the sampler draws rotation matrix 
+#' overall shrinkage parameters estimated using a hierarchical prior distribution.
+#'
+#' Given sign restrictions, in each Gibbs sampler iteration, the sampler draws rotation matrix
 #' \eqn{Q} uniformly from the space of \code{NxN} orthogonal matrices and checks if the sign restrictions
 #' are satisfied. If a valid \eqn{Q} is found within \code{max_tries} (defined in \code{specify_bsvarSIGN}),
 #' the sampler saves the current \eqn{A} and \eqn{B} draw and proceeds to the next iteration.
 #' Otherwise, the sampler then proceeds to next iteration without saving the current \eqn{A} and \eqn{B} draw.
 #' If a narrative sign restriction is given, the posterior
 #' draws are resampled with \code{algorithm 1} in Antolín-Díaz & Rubio-Ramírez (2018).
-#' 
+#'
 #' See section \bold{Details} for the model equations.
-#' 
-#' @details 
+#'
+#' @details
 #' The Structural VAR model is given by the reduced form equation:
 #' \deqn{Y = AX + E}
-#' where \eqn{Y} is an \code{NxT} matrix of dependent variables, \eqn{X} is a \code{KxT} matrix of explanatory variables, 
+#' where \eqn{Y} is an \code{NxT} matrix of dependent variables, \eqn{X} is a \code{KxT} matrix of explanatory variables,
 #' \eqn{E} is an \code{NxT} matrix of reduced form error terms, and \eqn{A} is an \code{NxK} matrix of
 #' autoregressive slope coefficients and parameters on deterministic terms in \eqn{X}.
-#' 
+#'
 #' The structural equation is given by
 #' \deqn{BE = U}
 #' where \eqn{U} is an \code{NxT} matrix of structural form error terms, and
 #' \eqn{B} is an \code{NxN} matrix of contemporaneous relationships. More specifically,
 #' \deqn{B = Q'P}
 #' where \eqn{Q} is an \code{NxN} rotation matrix and \eqn{P} is an \code{NxN} lower triangular matrix.
-#' 
+#'
 #' Finally, the structural shocks, \code{U}, are temporally and contemporaneously independent and jointly normally distributed with zero mean and unit variances.
 #' @param specification an object of class BSVARSIGN generated using the \code{specify_bsvarSIGN$new()} function.
 #' @param S a positive integer, the number of posterior draws to be generated
 #' @param thin a positive integer, specifying the frequency of MCMC output thinning
 #' @param show_progress a logical value, if \code{TRUE} the estimation progress bar is visible
-#' @param n_draws integer number of rotation matrix draws per posterior draw
+#' @param n_draws_rotation (optional; default parallel::detectCores())integer number of rotation matrix draws per posterior draw
 #' @param draw_strategy What to do about the oversampling of rotation matrices? 1 = overrep, 2 = prune, 3 = Importance Sampling
 #' @return An object of class \code{PosteriorBSVARSIGN} containing the Bayesian estimation output and containing two elements:
-#' 
+#'
 #'  \code{posterior} a list with a collection of \code{S} draws from the posterior distribution generated via Gibbs sampler containing:
 #'  \describe{
 #'  \item{A}{an \code{NxKxS} array with the posterior draws for matrix \eqn{A}}
@@ -59,24 +59,24 @@ estimate <- function(x, ...) {
 #'  A message is shown when skipped/(skipped+S/thin) > 0.05, where S/thin is the total number of draws returned.
 #'  }
 #' }
-#' 
-#' \code{last_draw} an object of class BSVARSIGN with the last draw of the current MCMC run as the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}. 
+#'
+#' \code{last_draw} an object of class BSVARSIGN with the last draw of the current MCMC run as the starting value to be passed to the continuation of the MCMC estimation using \code{estimate()}.
 #'
 #' @author Tomasz Woźniak \email{wozniak.tom@pm.me}, Xiaolei Wang \email{adamwang15@gmail.com}
-#' 
-#' @references 
-#' 
+#'
+#' @references
+#'
 #'  Antolín-Díaz & Rubio-Ramírez (2018) Narrative Sign Restrictions for SVARs, American Economic Review, 108(10), 2802-29, <doi:10.1257/aer.20161852>.
-#'  
+#'
 #'  Arias, Rubio-Ramírez, & Waggoner (2018), Inference Based on Structural Vector Autoregressions Identified With Sign and Zero Restrictions: Theory and Applications, Econometrica, 86(2), 685-720, <doi:10.3982/ECTA14468>.
-#'  
+#'
 #'  Giannone, Lenza, Primiceri (2015) Prior Selection for Vector Autoregressions, Review of Economics and Statistics, 97(2), 436-451 <doi:10.1162/REST_a_00483>.
-#'  
+#'
 #'  Rubio-Ramírez, Waggoner & Zha (2010) Structural Vector Autoregressions: Theory of Identification and Algorithms for Inference, The Review of Economic Studies, 77(2), 665-696, <doi:10.1111/j.1467-937X.2009.00578.x>.
-#'  
+#'
 #' @method estimate BSVARSIGN
 #' @export
-estimate.BSVARSIGN <- function(x, S, thin = 1, show_progress = TRUE, n_draws = 10, draw_strategy) {
+estimate.BSVARSIGN <- function(x, S, thin = 1, show_progress = TRUE, n_draws_rotation = parallel::detectCores(), draw_strategy) {
   ...
 }
 #' @examples
@@ -85,21 +85,21 @@ estimate.BSVARSIGN <- function(x, S, thin = 1, show_progress = TRUE, n_draws = 1
 #'
 #' # specify identifying restrictions:
 #' # + no effect on productivity (zero restriction)
-#' # + positive effect on stock prices (positive sign restriction) 
+#' # + positive effect on stock prices (positive sign restriction)
 #' sign_irf       = matrix(c(0, 1, rep(NA, 23)), 5, 5)
-#' 
+#'
 #' # specify the model and set seed
 #' set.seed(123)
 #' specification  = specify_bsvarSIGN$new(optimism * 100,
 #'                                        p        = 12,
 #'                                        sign_irf = sign_irf)
-#'                                        
+#'
 #' # estimate the model
 #' posterior      = estimate(specification, S = 10)
-#' 
+#'
 #' @export
-estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE,n_draws=10,draw_strategy) {
-  
+estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE,n_draws=parallel::detectCores(),draw_strategy) {
+
   # get the inputs to estimation
   # prior               = specification$last_draw$prior$get_prior()
   prior               = specification$prior$get_prior()
@@ -109,7 +109,7 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE,n
   data_matrices       = specification$data_matrices$get_data_matrices()
   p                   = specification$p
 
-  
+
   prior$B             = t(prior$A)
   prior$Ysoc          = t(prior$Ysoc)
   prior$Xsoc          = t(prior$Xsoc)
@@ -117,11 +117,11 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE,n
   prior$Xsur          = t(prior$Xsur)
   Y                   = t(data_matrices$Y)
   X                   = t(data_matrices$X)
-  
+
   Z                   = get_Z(identification$sign_irf)
   sign                = identification$sign_irf
   sign[is.na(sign)]   = 0
-  
+
   n_narratives        = length(identification$sign_narrative)
   get_type            = list("S" = 1, "A" = 2, "B" = 3)
   if (n_narratives > 0) {
@@ -142,14 +142,14 @@ estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE,n
   struc[is.na(struc)] = 0
 
   # estimation
-  qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X, 
-                              sign, narrative, struc, Z, prior, 
-                              show_progress, thin, max_tries,n_draws,draw_strategy)
-  
+  qqq                 = .Call(`_bsvarSIGNs_bsvar_sign_cpp`, S, p, Y, X,
+                              sign, narrative, struc, Z, prior,
+                              show_progress, thin, max_tries,n_draws_rotation,draw_strategy)
+
   specification$starting_values$set_starting_values(qqq$last_draw)
   output              = specify_posterior_bsvarSIGN$new(specification, qqq$posterior)
   output              = importance_sampling(output)
-  
+
   return(output)
 }
 
