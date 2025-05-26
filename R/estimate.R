@@ -98,7 +98,7 @@ estimate.BSVARSIGN <- function(x, S, thin = 1, show_progress = TRUE, n_draws_rot
 #' posterior      = estimate(specification, S = 10)
 #'
 #' @export
-estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE,n_draws=parallel::detectCores(),draw_strategy) {
+estimate.BSVARSIGN = function(specification, S, thin = 1, show_progress = TRUE,n_draws_rotation=parallel::detectCores(),draw_strategy) {
 
   # get the inputs to estimation
   # prior               = specification$last_draw$prior$get_prior()

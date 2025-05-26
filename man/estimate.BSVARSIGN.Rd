@@ -10,7 +10,7 @@ with traditional and narrative sign restrictions via Gibbs sampler}
   S,
   thin = 1,
   show_progress = TRUE,
-  n_draws = parallel::detectCores(),
+  n_draws_rotation = parallel::detectCores(),
   draw_strategy
 )
 
@@ -19,7 +19,7 @@ with traditional and narrative sign restrictions via Gibbs sampler}
   S,
   thin = 1,
   show_progress = TRUE,
-  n_draws = parallel::detectCores(),
+  n_draws_rotation = parallel::detectCores(),
   draw_strategy
 )
 }
@@ -32,9 +32,9 @@ with traditional and narrative sign restrictions via Gibbs sampler}
 
 \item{show_progress}{a logical value, if \code{TRUE} the estimation progress bar is visible}
 
-\item{draw_strategy}{What to do about the oversampling of rotation matrices? 1 = overrep, 2 = prune, 3 = Importance Sampling}
-
 \item{n_draws_rotation}{(optional; default parallel::detectCores())integer number of rotation matrix draws per posterior draw}
+
+\item{draw_strategy}{What to do about the oversampling of rotation matrices? 1 = overrep, 2 = prune, 3 = Importance Sampling}
 }
 \value{
 An object of class \code{PosteriorBSVARSIGN} containing the Bayesian estimation output and containing two elements:
